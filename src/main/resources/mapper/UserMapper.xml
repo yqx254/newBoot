@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myboot.dao.UserDao">
+    <sql id="FIELDS">
+        id, user_name,password,salt,realname,role_id,token,expired_at
+    </sql>
+
+    <insert id="add" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bj_user(
+            user_name, password, salt,realname,role_id,token,expired_at
+        )
+        VALUES(
+            #{userName}, #{password}, #{salt}, #{realname},#{roleId},#{token},#{expiredAt}
+        )
+    </insert>
+
+    <update id="updateById" parameterType="User">
+        UPDATE bj_user
+        <set>
+            <if test="userName != null">
+                , username = #{userName}
+            </if>
+            <if test="password != null">
+                , password = #{password}
+            </if>
+            <if test="salt != null">
+                , salt = #{salt}
+            </if>
+            <if test="realname != null">
+                , realname= #{realname}
+            </if>
+            <if test="roleId != null">
+                , role_id = #{roleId}
+            </if>
+            <if test="token != null">
+                , token = #{token}
+            </if>
+            <if test="expiredAt != null">
+                , expired_at = #{expiredAt}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteById" parameterType="Integer">
+        UPDATE bj_user
+        SET delete_flag = 2
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectById" parameterType="Integer">
+        SELECT
+        <include refid="FIELDS"/>
+        FROM bj_user
+        WHERE id = #{id}
+    </select>
+
+</mapper>
